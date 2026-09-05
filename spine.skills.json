@@ -1,0 +1,33 @@
+{
+  "_comment": "Registration for The Spine. Field names/shape are this project's own convention - no external Spine schema was available to verify against. Every *_ref points at real code in this repo.",
+  "agent": {
+    "id": "cv-screener",
+    "name": "cv-screener",
+    "version": "1.0.0",
+    "tenant": "bgo-internal",
+    "description": "Screens a candidate CV for fitness as a BGO call center agent and produces a hiring recommendation scorecard.",
+    "procedure_ref": "aop/cv_screening.yaml",
+    "entry_point": "main.screen_cv"
+  },
+  "skills": [
+    {
+      "id": "check_qualifications",
+      "name": "check_qualifications",
+      "description": "Runs deterministic checks (experience, skills, red flags) against CV text and returns structured findings.",
+      "tool_ref": "tools.qualification_checks.check_qualifications",
+      "schema_ref": "tools.qualification_checks.CHECK_QUALIFICATIONS_DECLARATION"
+    }
+  ],
+  "connector": {
+    "tenant": "bgo-internal",
+    "scope": "bgo-internal",
+    "invocation_url_env": "SPINE_CENTRAL_URL",
+    "tenant_header": "X-Tenant-ID",
+    "endpoints": {
+      "metering_events": "/metering/events",
+      "outcomes": "/outcomes"
+    },
+    "fail_open": true,
+    "ledger_ref": "ledger.record_run"
+  }
+}
